@@ -1,18 +1,21 @@
 # Run Chrome in a container
-#
-# docker run -it \
-#	--net host \ # may as well YOLO
-#	--cpuset-cpus 0 \ # control the cpu
-#	--memory 2048mb \ # max memory it can use
-#	-v /tmp/.X11-unix:/tmp/.X11-unix \ # mount the X11 socket
-#	-e DISPLAY=unix$DISPLAY \
-#	-v $HOME/Downloads:/root/Downloads \
-#	-v $HOME/.config/google-chrome/:/data \ # if you want to save state
-#	--device /dev/snd \ # so we have sound
-#	-v /dev/shm:/dev/shm \
-#	--name chrome \
-#	ilowe/chrome
-#
+# 
+# docker run -d \
+# 		--net host \
+# 		-v /etc/localtime:/etc/localtime:ro \
+# 		-v /tmp/.X11-unix:/tmp/.X11-unix \
+# 		-e DISPLAY=unix$DISPLAY \
+# 		-v $HOME/Downloads:/root/Downloads \
+# 		-v $HOME/.config/google-chrome:/data \
+# 		-v /dev/shm:/dev/shm \
+# 		-v /etc/hosts:/etc/hosts \
+# 		--device /dev/snd \
+# 		--device /dev/video0 \
+# 		--group-add audio \
+# 		--group-add video \
+# 		--name chrome \
+# 		ilowe/chrome --user-data-dir=/data --force-device-scale-factor=1 \
+# 		--proxy-server="$proxy" --host-resolver-rules="$map" "$args"
 
 # Base docker image
 FROM ubuntu:trusty
