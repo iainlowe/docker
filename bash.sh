@@ -3,11 +3,15 @@ function dbuild() {
 
     local OPTIND
     local build=1
+    local dockerenv=
 
-    while getopts ":aAph" opt; do
+    while getopts ":aAphE:" opt; do
         case $opt in
             a)
                 local mkalias=1
+                ;;
+            E)
+                dockerenv="$dockerenv --build-arg $OPTARG"
                 ;;
             A)
                 build=0
@@ -32,9 +36,9 @@ function dbuild() {
     local repo="ilowe/$name"
     local wd="$(cat ~/.config/dbuild/dir)/$name"
 
-    [ "$build" = "1" ] && { pushd $wd; docker build -t $repo .; popd; }
+    [ "$build" = "1" ] && { pushd $wd; docker build $dockerenv -t $repo .; popd; }
     [ "$push" = "1" ] && docker push $repo
-    [ "$mkalias" = "1" ] && ___dbuild-mkdockeralias $name && echo "Added alias $name"
+    [ "$mkalias" = "1" ] && ___dbuild-mkdockeralias $name
 }
 
 function ___dbuild-rmdocker() {
